@@ -27,76 +27,113 @@ public class DefaultStudentSystem implements StudentSystem {
 
     @Override
     public int addCourse(String courseCode, String name) {
-        return 0;
+        Course course = new Course(courseCode, name);
+
+        return courseDAO.saveCourse(course);
     }
 
     @Override
     public void updateCourse(int courseId, String courseCode, String name) {
+        Course course = getCourse(courseId);
 
+        if (course != null) {
+            course.setCourseCode(courseCode);
+            course.setName(name);
+
+            courseDAO.saveCourse(course);
+        }
     }
 
     @Override
     public Course getCourse(int courseId) {
-        return null;
+        return courseDAO.getCourse(courseId);
     }
 
     @Override
     public Course getCourseByCourseCode(String courseCode) {
-        return null;
+        return courseDAO.getCourseByCourseCode(courseCode);
     }
 
     @Override
     public Course getCourseByName(String name) {
-        return null;
+        return courseDAO.getCourseByName(name);
     }
 
     @Override
     public Collection<Course> getAllCourses() {
-        return null;
+        return courseDAO.getAllCourses();
     }
 
     @Override
     public void delCourse(int courseId) {
+        Course course = courseDAO.getCourse(courseId);
 
+        if (course != null) {
+            courseDAO.delCourse(course);
+        }
     }
 
     @Override
     public void addAttendantToCourse(int courseId, int studentId) {
+        Course course = courseDAO.getCourse(courseId);
+        Student student = studentDAO.getStudent(studentId);
 
+        if (course != null && student != null) {
+            course.getAttendants().add(student);
+            courseDAO.saveCourse(course);
+        }
     }
 
     @Override
     public void removeAttendantFromCourse(int courseId, int studentId) {
+        Course course = courseDAO.getCourse(courseId);
+        Student student = studentDAO.getStudent(studentId);
 
+        if (course != null && student != null) {
+            course.getAttendants().remove(student);
+            courseDAO.saveCourse(course);
+        }
     }
 
     @Override
     public int addStudent(String name) {
-        return 0;
+        Student student = new Student(name);
+
+        return studentDAO.saveStudent(student);
     }
 
     @Override
     public void updateStudent(int studentId, String name) {
+        Student student = studentDAO.getStudent(studentId);
 
+        if (student != null) {
+            student.setName(name);
+
+            studentDAO.saveStudent(student);
+        }
     }
 
     @Override
     public Student getStudent(int studentId) {
-        return null;
+        return studentDAO.getStudent(studentId);
     }
 
     @Override
     public Student getStudentByName(String name) {
-        return null;
+        return studentDAO.getStudentByName(name);
     }
 
     @Override
     public Collection<Student> getAllStudents() {
-        return null;
+        return studentDAO.getAllStudents();
     }
 
     @Override
     public void delStudent(int studentId) {
+        Student student = studentDAO.getStudent(studentId);
 
+        if (student != null) {
+            studentDAO.delStudent(student);
+        }
     }
 }
