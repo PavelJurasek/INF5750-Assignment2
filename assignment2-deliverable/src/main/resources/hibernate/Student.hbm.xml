@@ -4,7 +4,7 @@
         "http://hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 
 <hibernate-mapping>
-    <class name="no.uio.inf5750.assignment2.model.Student" table="course">
+    <class name="no.uio.inf5750.assignment2.model.Student" table="student">
         <id name="id">
             <generator class="native"/>
         </id>
