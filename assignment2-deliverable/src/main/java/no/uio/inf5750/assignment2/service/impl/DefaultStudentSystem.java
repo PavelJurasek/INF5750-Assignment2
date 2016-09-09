@@ -1,5 +1,7 @@
 package no.uio.inf5750.assignment2.service.impl;
 
+import no.uio.inf5750.assignment2.dao.CourseDAO;
+import no.uio.inf5750.assignment2.dao.StudentDAO;
 import no.uio.inf5750.assignment2.model.Course;
 import no.uio.inf5750.assignment2.model.Student;
 import no.uio.inf5750.assignment2.service.StudentSystem;
@@ -10,6 +12,19 @@ import java.util.Collection;
  * Created by pjurasek on 09.09.16.
  */
 public class DefaultStudentSystem implements StudentSystem {
+
+    private CourseDAO courseDAO;
+
+    private StudentDAO studentDAO;
+
+    public void setCourseDAO(CourseDAO courseDAO) {
+        this.courseDAO = courseDAO;
+    }
+
+    public void setStudentDAO(StudentDAO studentDAO) {
+        this.studentDAO = studentDAO;
+    }
+
     @Override
     public int addCourse(String courseCode, String name) {
         return 0;

@@ -2,6 +2,7 @@ package no.uio.inf5750.assignment2.dao.hibernate;
 
 import no.uio.inf5750.assignment2.dao.StudentDAO;
 import no.uio.inf5750.assignment2.model.Student;
+import org.hibernate.SessionFactory;
 
 import java.util.Collection;
 
@@ -9,6 +10,13 @@ import java.util.Collection;
  * Created by pjurasek on 09.09.16.
  */
 public class HibernateStudentDAO implements StudentDAO {
+
+    private SessionFactory sessionFactory;
+
+    public void setSessionFactory(SessionFactory sessionFactory) {
+        this.sessionFactory = sessionFactory;
+    }
+
     @Override
     public int saveStudent(Student student) {
         return 0;
