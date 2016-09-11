@@ -25,7 +25,14 @@ public class HibernateCourseDAO implements CourseDAO {
 
     @Override
     public int saveCourse(Course course) {
-        return (Integer) sessionFactory.getCurrentSession().save(course);
+        Session session = sessionFactory.getCurrentSession();
+
+        if (course.getId() != 0) {
+            session.update(course);
+            return course.getId();
+        }
+
+        return (Integer) session.save(course);
     }
 
     @Override
