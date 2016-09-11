@@ -136,4 +136,17 @@ public class DefaultStudentSystem implements StudentSystem {
             studentDAO.delStudent(student);
         }
     }
+
+    @Override
+    public void setStudentLocation(int studentId, String latitude, String longitude) {
+        Student student = studentDAO.getStudent(studentId);
+
+        if (student != null) {
+            student.setLatitude(latitude);
+            student.setLongitude(longitude);
+
+            studentDAO.saveStudent(student);
+        }
+    }
+
 }

@@ -10,6 +10,8 @@
         </id>
 
         <property name="name" type="string" unique="true" not-null="true"/>
+        <property name="latitude" type="string"/>
+        <property name="longitude" type="string"/>
 
         <set name="courses" table="course_student">
             <key>
