@@ -4,6 +4,12 @@ function getStudentData() {
 	// You must first download the student json data from the server
 	// then call populateStudentTable(json);
 	// and then populateStudentLocationForm(json);
+	$.ajax('/api/student', {
+		success: function(data) {
+			populateStudentTable(data);
+			populateStudentLocationForm(data);
+		}
+	});
 
 }
 
@@ -15,7 +21,35 @@ function populateStudentTable(json) {
 	// Also search how to make rows and columns in a table with html
 
 	// the table can you see in index.jsp with id="studentTable"
-	
+
+	var courses = [];
+	var finalString = '';
+	for (var s = 0; s < json.length; s++) {
+		var rowString = '<tr>';
+		var student = json[s];
+		student = explodeJSON(student);
+		addMarker(student);
+
+		rowString += '<td>'+student.name+'</td>';
+
+		rowString += '<td>';
+		for (var c = 0; c < student.courses.length; c++) {
+			var course = explodeJSON(student.courses[c]);
+			rowString += '<p>'+course.name+'</p>';
+		}
+		rowString += '</td>';
+
+		if (student.latitude) {
+			rowString += '<td>'+student.latitude+', '+student.longitude+'</td>';
+		} else {
+			rowString += '<td><i>no location</i></td>';
+		}
+		rowString += '</tr>';
+
+		finalString += rowString;
+	}
+
+	$('#studentTable').html(finalString);
 }
 
 function populateStudentLocationForm(json) {
@@ -39,6 +73,11 @@ $('#locationbtn').on('click', function(e) {
 
 // This function gets called when you press the Set Location button
 function get_location() {
+	if (Modernizr.geolocation) {
+		navigator.geolocation.getCurrentPosition(location_found);
+	} else {
+		handleNoGeolocation();
+	}
 }
 
 // Call this function when you've succesfully obtained the location. 
@@ -47,6 +86,58 @@ function location_found(position) {
 	// When you've updated the location, call populateStudentTable(json); again
 	// to put the new location next to the student on the page. .
 
+	var latitude = position.coords.latitude;
+	var longitude = position.coords.longitude;
+
+	var studentId = parseInt($('#selectedStudent').val());
+
+	var payload = JSON.stringify({
+		"latitude": latitude,
+		"longitude": longitude
+	});
+
+	$.ajax('/api/student/'+studentId+'/location', {
+		method: 'POST',
+		contentType: "application/json;charset=UTF-8",
+		data: payload,
+		success: function (data) {
+			populateStudentTable(data);
+		}
+	});
+}
+
+var map;
+function initialize_map() {
+	var mapOptions = {
+		zoom : 10,
+		mapTypeId : google.maps.MapTypeId.ROADMAP
+	};
+	map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
+	// Try HTML5 geolocation
+	if (Modernizr.geolocation) {
+		navigator.geolocation.getCurrentPosition(function(position) {
+			var pos = new google.maps.LatLng(position.coords.latitude,
+				position.coords.longitude);
+			map.setCenter(pos);
+		}, function() {
+			handleNoGeolocation(true);
+		});
+	} else {
+		handleNoGeolocation();
+	}
+}
+
+function handleNoGeolocation() {
+	$('.lead.text-danger').text('Geolocation is not supprted by your device.');
+}
+
+function addMarker(student) {
+	var position = new google.maps.LatLng(student.latitude, student.longitude);
+	var marker = new google.maps.Marker({
+		position: position,
+		map: map,
+		title: student.name
+	});
 }
 
 var objectStorage = new Object();

@@ -102,10 +102,12 @@ html,body {
 	<script src="http://code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
 	<script src="js/bootstrap.min.js"></script>
 	<script src="js/assignment.js"></script>
+	<script src="https://maps.googleapis.com/maps/api/js"></script>
 
 	<script>
 	$(document).ready(function() {
 		getStudentData();
+		initialize_map();
 	});
 	</script>
 
