@@ -58,4 +58,8 @@
         <property name="studentDAO" ref="studentDao"/>
     </bean>
 
+    <bean id="apiController" class="no.uio.inf5750.assignment2.gui.controller.ApiController">
+        <property name="studentSystem" ref="studentSystem"/>
+    </bean>
+
 </beans>
