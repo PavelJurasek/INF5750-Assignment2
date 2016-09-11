@@ -5,6 +5,7 @@ import no.uio.inf5750.assignment2.model.Student;
 import org.hibernate.*;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.NoResultException;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -44,9 +45,13 @@ public class HibernateStudentDAO implements StudentDAO {
         Student student = null;
 
         try {
-            student = (Student) session.createQuery("FROM Student WHERE name = :name ORDER by id DESC")
-                    .setParameter("name", name)
-                    .getSingleResult();
+            try {
+                student = (Student) session.createQuery("FROM Student WHERE name = :name ORDER by id DESC")
+                        .setParameter("name", name)
+                        .getSingleResult();
+            } catch (NoResultException e) {
+                return null;
+            }
 
         } catch (HibernateException e) {
             e.printStackTrace();

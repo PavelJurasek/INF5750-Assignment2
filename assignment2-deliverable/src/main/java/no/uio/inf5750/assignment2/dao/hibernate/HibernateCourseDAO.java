@@ -8,6 +8,7 @@ import org.hibernate.SessionFactory;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -47,9 +48,13 @@ public class HibernateCourseDAO implements CourseDAO {
         Course course = null;
 
         try {
-            course = (Course) session.createQuery("FROM Course WHERE name = :code ORDER by id DESC")
-                    .setParameter("code", courseCode)
-                    .getSingleResult();
+            try {
+                course = (Course) session.createQuery("FROM Course WHERE courseCode = :code ORDER by id DESC")
+                        .setParameter("code", courseCode)
+                        .getSingleResult();
+            } catch (NoResultException e) {
+                return null;
+            }
 
         } catch (HibernateException e) {
             e.printStackTrace();
@@ -65,9 +70,13 @@ public class HibernateCourseDAO implements CourseDAO {
         Course course = null;
 
         try {
-            course = (Course) session.createQuery("FROM Course WHERE name = :name ORDER by id DESC")
-                    .setParameter("name", name)
-                    .getSingleResult();
+            try {
+                course = (Course) session.createQuery("FROM Course WHERE name = :name ORDER by id DESC")
+                        .setParameter("name", name)
+                        .getSingleResult();
+            } catch (NoResultException e) {
+                return null;
+            }
 
         } catch (HibernateException e) {
             e.printStackTrace();
